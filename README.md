@@ -1,7 +1,7 @@
 # CoronaCurve
 Plot some Corona measures (because I did not find the KPIs of my personal interest)
 
-I just wanted to know whether the number of corona new infected people goes up faster or slower tha the last day. found it on now website,so I decided to do it on my own.
+I just wanted to know whether the number of corona new infected people goes up faster or slower than the last day. found it on now website,so I decided to do it on my own.
 
 feel free to contribute to the project on [GitHub](https://github.com/jlinkohr/CoronaCurve) !
 
