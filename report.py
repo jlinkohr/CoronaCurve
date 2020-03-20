@@ -1,7 +1,7 @@
 import pandas as pd 
 import matplotlib.pyplot as plt 
 
-dataFile = "coronaData_GER.csv"
+dataFile = "coronaData_BW.csv"
 
 # read the data
 total = pd.read_csv(dataFile)
