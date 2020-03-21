@@ -1,7 +1,9 @@
 import pandas as pd 
 import matplotlib.pyplot as plt 
 
-dataFile = "coronaData_BW.csv"
+localSuffix = "BW"
+
+dataFile = "coronaData_" + localSuffix + ".csv"
 
 # read the data
 total = pd.read_csv(dataFile)
@@ -79,7 +81,7 @@ axes[2].get_legend().remove()
 
 plt.tight_layout()
 
-plt.savefig("Absolute_Values.png", dpi=300)
+plt.savefig("Absolute_Values_" + localSuffix + ".png", dpi=300)
 # ------------ second chart -------------
 fig, axes = plt.subplots(3,1)
 axes[0].xaxis.set_visible(False) 
@@ -89,7 +91,7 @@ outValue.plot.bar(x='Date', y='Percent', color='red', ax = axes[0], title='data 
 outValue.plot.bar(x='Date', y='Diff', color='blue', ax = axes[1], title='Unterschied zum Vortag (absolut)')
 outValue.plot.bar(x='Date', y='DiffDiff', color='blue', ax = axes[2], title='Unterschiedsänderung zum Vortag (absolut)')
 plt.tight_layout()
-plt.savefig("Relative_Values.png", dpi=300)
+plt.savefig("Relative_Values_" + localSuffix + ".png", dpi=300)
 plt.show()
 
 p = input()
