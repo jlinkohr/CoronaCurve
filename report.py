@@ -92,8 +92,8 @@ for localSuffix in localSuffixes:
     # ------------ second chart (containing of 3 subplots): the calculated values -------------
     # get values of last date in strings
     lastPercent = f"{outValue.iloc[-1]['Percent']:.2f}"
-    lastDiff = f"{outValue.iloc[-1]['Diff']}"
-    lastDiffDiff = f"{outValue.iloc[-1]['DiffDiff']}"
+    lastDiff = f"{outValue.iloc[-1]['Diff']:.0f}"
+    lastDiffDiff = f"{outValue.iloc[-1]['DiffDiff']:.0f}"
     
     
     fig, axes = plt.subplots(3,1)
