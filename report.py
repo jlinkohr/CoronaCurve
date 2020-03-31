@@ -1,12 +1,18 @@
 import pandas as pd 
 import matplotlib.pyplot as plt 
+from datetime import date
 
-localSuffixes = ["BW","GER"]
+# process files with these suffixes
+localSuffixes = ["BW", "BY", "GER"]
+
+# date string for reports
+today = date.today().strftime("%d.%m.%Y")
+
 
 for localSuffix in localSuffixes:
     print (f"------ processing {localSuffix} -----\n")
 
-
+    #set the filename to process
     dataFile = "coronaData_" + localSuffix + ".csv"
 
     # read the data
@@ -65,7 +71,7 @@ for localSuffix in localSuffixes:
     axes[1].xaxis.set_visible(False)
 
     # subchart 1: total
-    outValue.plot(x='Date', y='Total', ax=axes[0], title='data taken from Berliner Morgenpost - ' + dataFile + '\n\nAnzahl Infizierte')
+    outValue.plot(x='Date', y='Total', ax=axes[0], title='data taken from Berliner Morgenpost - ' + dataFile + " (" + today + ")" +'\n\nAnzahl Infizierte')
     axes[0].get_legend().remove()
 
     # subchart 2: curated
@@ -85,7 +91,7 @@ for localSuffix in localSuffixes:
     axes[0].xaxis.set_visible(False) 
     axes[1].xaxis.set_visible(False)
 
-    outValue.plot.bar(x='Date', y='Percent', color='red', ax = axes[0], title='data taken from Berliner Morgenpost - ' + dataFile + '\n\nNeuinfektionen in Prozent zur Gesamtzahl der Infizierten')
+    outValue.plot.bar(x='Date', y='Percent', color='red', ax = axes[0], title='data taken from Berliner Morgenpost - ' + dataFile +" (" + today + ")"+ '\n\nNeuinfektionen in Prozent zur Gesamtzahl der Infizierten')
     outValue.plot.bar(x='Date', y='Diff', color='blue', ax = axes[1], title='Unterschied zum Vortag (absolut)')
     outValue.plot.bar(x='Date', y='DiffDiff', color='blue', ax = axes[2], title='Unterschiedsänderung zum Vortag (absolut)')
     plt.tight_layout()
