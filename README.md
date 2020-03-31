@@ -21,6 +21,11 @@ jochen.linkohr@gmx.de
 
 [Relative Values Baden-Württemberg](https://jlinkohr.github.io/CoronaCurve/Relative_Values_BW.png)
 
+### Bayern:
+
+[Absolute Values Bayern](https://jlinkohr.github.io/CoronaCurve/Absolute_Values_BY.png)
+
+[Relative Values Bayern](https://jlinkohr.github.io/CoronaCurve/Relative_Values_BY.png)
 
 
 ###### Data is taken from : https://interaktiv.morgenpost.de/corona-virus-karte-infektionen-deutschland-weltweit/

@@ -1,13 +1,8 @@
 import pandas as pd 
 import matplotlib.pyplot as plt 
-from datetime import date
 
 # process files with these suffixes
 localSuffixes = ["BW", "BY", "GER"]
-
-# date string for reports
-today = date.today().strftime("%d.%m.%Y")
-
 
 for localSuffix in localSuffixes:
     print (f"------ processing {localSuffix} -----\n")
@@ -65,21 +60,29 @@ for localSuffix in localSuffixes:
     plt.rc('legend', fontsize=SMALL_SIZE)    # legend fontsize
     plt.rc('figure', titlesize=BIGGER_SIZE)  # fontsize of the figure title
 
+    # get values of last date in strings
+    lastDate = str(outValue.iloc[-1]['Date'])
+    lastTotal = str(outValue.iloc[-1]['Total'])
+    lastCurated = str(outValue.iloc[-1]['Curated'])
+    lastDeaths = str(outValue.iloc[-1]['Deaths'])
+    
+    print(f"Last date: {lastDate}\n")
+
     # ------------ first chart (containing of 3 subplots) ----------------
     fig, axes = plt.subplots(3,1)
     axes[0].xaxis.set_visible(False) 
     axes[1].xaxis.set_visible(False)
 
     # subchart 1: total
-    outValue.plot(x='Date', y='Total', ax=axes[0], title='data taken from Berliner Morgenpost - ' + dataFile + " (" + today + ")" +'\n\nAnzahl Infizierte')
+    outValue.plot(x='Date', y='Total', ax=axes[0], title='data taken from Berliner Morgenpost - ' + dataFile + " (" + lastDate + ")" +'\n\nAnzahl Infizierte (akt. Wert: ' + lastTotal + ")")
     axes[0].get_legend().remove()
 
     # subchart 2: curated
-    outValue.plot(x='Date', y='Curated', color='green', ax=axes[1], title='Anzahl wieder gesund')
+    outValue.plot(x='Date', y='Curated', color='green', ax=axes[1], title='Anzahl wieder gesund (akt. Wert: ' + lastCurated + ")")
     axes[1].get_legend().remove()
 
     # subchart 3: deaths
-    outValue.plot(x='Date', y='Deaths', color='red', ax=axes[2], title='Anzahl Tote')
+    outValue.plot(x='Date', y='Deaths', color='red', ax=axes[2], title='Anzahl Tote (akt. Wert: ' + lastDeaths + ")")
     axes[2].get_legend().remove()
     # autofromat the layout to fit
     plt.tight_layout()
@@ -87,13 +90,19 @@ for localSuffix in localSuffixes:
     plt.savefig("Absolute_Values_" + localSuffix + ".png", dpi=300)
 
     # ------------ second chart (containing of 3 subplots): the calculated values -------------
+    # get values of last date in strings
+    lastPercent = f"{outValue.iloc[-1]['Percent']:.2f}"
+    lastDiff = f"{outValue.iloc[-1]['Diff']}"
+    lastDiffDiff = f"{outValue.iloc[-1]['DiffDiff']}"
+    
+    
     fig, axes = plt.subplots(3,1)
     axes[0].xaxis.set_visible(False) 
     axes[1].xaxis.set_visible(False)
 
-    outValue.plot.bar(x='Date', y='Percent', color='red', ax = axes[0], title='data taken from Berliner Morgenpost - ' + dataFile +" (" + today + ")"+ '\n\nNeuinfektionen in Prozent zur Gesamtzahl der Infizierten')
-    outValue.plot.bar(x='Date', y='Diff', color='blue', ax = axes[1], title='Unterschied zum Vortag (absolut)')
-    outValue.plot.bar(x='Date', y='DiffDiff', color='blue', ax = axes[2], title='Unterschiedsänderung zum Vortag (absolut)')
+    outValue.plot.bar(x='Date', y='Percent', color='red', ax = axes[0], title='data taken from Berliner Morgenpost - ' + dataFile +" (" + lastDate + ")"+ '\n\nNeuinfektionen in Prozent zur Gesamtzahl der Infizierten (akt. Wert: ' + lastPercent + ")")
+    outValue.plot.bar(x='Date', y='Diff', color='blue', ax = axes[1], title='Unterschied zum Vortag (absolut) (akt. Wert: ' + lastDiff + ")")
+    outValue.plot.bar(x='Date', y='DiffDiff', color='blue', ax = axes[2], title='Unterschiedsänderung zum Vortag (absolut) (akt. Wert: ' + lastDiffDiff + ")")
     plt.tight_layout()
 
     # save it in a file
