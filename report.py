@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt 
 
 # process files with these suffixes
-localSuffixes = ["BW", "BY", "GER"]
+localSuffixes = ["BW", "BY", "GER", "WORLD", "US"]
 
 for localSuffix in localSuffixes:
     print (f"------ processing {localSuffix} -----\n")
