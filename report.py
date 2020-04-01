@@ -16,25 +16,44 @@ for localSuffix in localSuffixes:
     # calculate the difference of totals
 
     i = 0
-    AktDiff = pd.DataFrame(columns=['Diff', 'Percent', 'DiffDiff'])
+    # StillInfected - no of people infected but not curated
+    # Diff - no of new infections from last value
+    # percent - percentage of new infections from StillInfected (ratio)
+    # DiffDiff - change of change (difference of changes from last change value to today)
+    AktDiff = pd.DataFrame(columns=['StillInfected', 'Diff', 'Percent', 'DiffDiff'])
     lastDiff = 0
 
     # go through all values and calculate the addiional kpis for each day
     for x in range(len(total)):
 
+        # get actual Number of infected people
         aktval=total.iloc[i]['Total']
         if (i != 0):
             lastval=total.iloc[i-1]['Total']
         else:
             lastval = 0
+
+        # get actual Number of curated people
+        aktCurated=total.iloc[i]['Curated']
+        if (i != 0):
+            lastCurated=total.iloc[i-1]['Curated']
+        else:
+            lastCurated = 0
+
         i=i+1
+
+        # calculate number of still Infected
+        stillInfected = aktval - aktCurated
 
         # calculate difference between last value and actual value
         diff=aktval-lastval
 
-        # calculate percentage of change in relation to last value
-        if (lastval != 0):
-            percent=diff/lastval*100
+        lastStillInfected = lastval - lastCurated
+
+
+        # calculate percentage of change (how much new infected people in relation to still infected) in relation to last value
+        if (lastStillInfected != 0):
+            percent=(stillInfected - lastStillInfected) / lastStillInfected *100
         else:
             #if first value, set to zero
             percent=0
@@ -43,7 +62,7 @@ for localSuffix in localSuffixes:
         DiffDiff = diff-lastDiff
         lastDiff = diff
 
-        AktDiff = AktDiff.append({'Diff' : diff, 'Percent': percent, 'DiffDiff' : DiffDiff}, ignore_index=True)
+        AktDiff = AktDiff.append({'StillInfected' : stillInfected, 'Diff' : diff, 'Percent': percent, 'DiffDiff' : DiffDiff}, ignore_index=True)
 
     # add the calculated kpis to the values matrix
     outValue = pd.concat([total , AktDiff], axis=1)
@@ -65,13 +84,15 @@ for localSuffix in localSuffixes:
     lastTotal = str(outValue.iloc[-1]['Total'])
     lastCurated = str(outValue.iloc[-1]['Curated'])
     lastDeaths = str(outValue.iloc[-1]['Deaths'])
-    
+    lastStillInfected = f"{outValue.iloc[-1]['StillInfected']:.0f}"
+
     print(f"Last date: {lastDate}\n")
 
-    # ------------ first chart (containing of 3 subplots) ----------------
-    fig, axes = plt.subplots(3,1)
+    # ------------ first chart (containing of 4 subplots) ----------------
+    fig, axes = plt.subplots(4,1)
     axes[0].xaxis.set_visible(False) 
     axes[1].xaxis.set_visible(False)
+    axes[2].xaxis.set_visible(False)
 
     # subchart 1: total
     outValue.plot(x='Date', y='Total', ax=axes[0], title='data taken from Berliner Morgenpost - ' + dataFile + " (" + lastDate + ")" +'\n\nAnzahl Infizierte (akt. Wert: ' + lastTotal + ")")
@@ -82,8 +103,13 @@ for localSuffix in localSuffixes:
     axes[1].get_legend().remove()
 
     # subchart 3: deaths
-    outValue.plot(x='Date', y='Deaths', color='red', ax=axes[2], title='Anzahl Tote (akt. Wert: ' + lastDeaths + ")")
+    outValue.plot(x='Date', y='Deaths', color='black', ax=axes[2], title='Anzahl Tote (akt. Wert: ' + lastDeaths + ")")
     axes[2].get_legend().remove()
+
+    # subchart 4: stillInfected
+    outValue.plot(x='Date', y='StillInfected', color='red', ax=axes[3], title='Anzahl noch infiziert (akt. Wert: ' + lastStillInfected + ")")
+    axes[3].get_legend().remove()
+
     # autofromat the layout to fit
     plt.tight_layout()
     # save it in a file 
