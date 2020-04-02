@@ -53,7 +53,7 @@ for localSuffix in localSuffixes:
 
         # calculate percentage of change (how much new infected people in relation to still infected) in relation to last value
         if (lastStillInfected != 0):
-            percent=(stillInfected - lastStillInfected) / lastStillInfected *100
+            percent=(diff) / lastStillInfected *100
         else:
             #if first value, set to zero
             percent=0
@@ -110,7 +110,7 @@ for localSuffix in localSuffixes:
     outValue.plot(x='Date', y='StillInfected', color='red', ax=axes[3], title='Anzahl noch infiziert (akt. Wert: ' + lastStillInfected + ")")
     axes[3].get_legend().remove()
 
-    # autofromat the layout to fit
+    # autoformat the layout to fit
     plt.tight_layout()
     # save it in a file 
     plt.savefig("Absolute_Values_" + localSuffix + ".png", dpi=300)
