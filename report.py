@@ -42,8 +42,11 @@ for localSuffix in localSuffixes:
 
         i=i+1
 
+        # number of deaths
+        aktDeaths=total.iloc[i]['Deaths']
+        
         # calculate number of still Infected
-        stillInfected = aktval - aktCurated
+        stillInfected = aktval - aktCurated - aktDeaths
 
         # calculate difference between last value and actual value
         diff=aktval-lastval
