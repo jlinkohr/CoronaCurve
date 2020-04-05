@@ -64,7 +64,18 @@ for localSuffix in localSuffixes:
         DiffDiff = diff-lastDiff
         lastDiff = diff
 
-        AktDiff = AktDiff.append({'StillInfected' : stillInfected, 'Diff' : diff, 'Percent': percent, 'DiffDiff' : DiffDiff}, ignore_index=True)
+        # calculate relative rate to last week (assumption: incubation time approx 5 days, people who are positive will not infect more)
+        if (i > 7):
+            infectedLastWeek = AktDiff.iloc[i-5]['StillInfected']
+            if (infectedLastWeek != 0):
+                relInfectedToLastWeek = diff / infectedLastWeek *100
+            else: 
+                relInfectedToLastWeek = 0
+        else:
+            infectedLastWeek = 0
+            relInfectedToLastWeek = 0
+
+        AktDiff = AktDiff.append({'relInfectedToLastWeek' : relInfectedToLastWeek, 'StillInfected' : stillInfected, 'Diff' : diff, 'Percent': percent, 'DiffDiff' : DiffDiff}, ignore_index=True)
 
         i=i+1
 
@@ -129,7 +140,7 @@ for localSuffix in localSuffixes:
     fig, axes = plt.subplots(3,1)
     axes[0].xaxis.set_visible(False) 
     axes[1].xaxis.set_visible(False)
-
+ 
     outValue.plot.bar(x='Date', y='Percent', color='red', ax = axes[0], title='data taken from Berliner Morgenpost - ' + dataFile +" (" + lastDate + ")"+ '\n\nNeuinfektionen in Prozent zur Gesamtzahl der Infizierten (akt. Wert: ' + lastPercent + ")")
     outValue.plot.bar(x='Date', y='Diff', color='blue', ax = axes[1], title='Unterschied zum Vortag (absolut) (akt. Wert: ' + lastDiff + ")")
     outValue.plot.bar(x='Date', y='DiffDiff', color='blue', ax = axes[2], title='Unterschiedsänderung zum Vortag (absolut) (akt. Wert: ' + lastDiffDiff + ")")
@@ -137,7 +148,17 @@ for localSuffix in localSuffixes:
 
     # save it in a file
     plt.savefig("Relative_Values_" + localSuffix + ".png", dpi=300)
-    
+
+    ##
+    #fig, axes = plt.subplots(2,1)
+     
+    lastRelInfectedToLastWeek = f"{outValue.iloc[-1]['relInfectedToLastWeek']:.2f}"
+    outValue.plot.bar(x='Date', y='relInfectedToLastWeek', color='red', title='data taken from Berliner Morgenpost - ' + dataFile +" (" + lastDate + ")" +'\n\nRelativer Wert der Änderung zum Wert vor 5 Tagen (akt. Wert: ' + lastRelInfectedToLastWeek + ")")
+    plt.tight_layout()
+    # save it in a file
+    plt.savefig("Relative_Values_LastWeek" + localSuffix + ".png", dpi=300)
+
+
     # dont show, we are saving only, uncomment to see the chart instant
     # plt.show()
     # p = input()
