@@ -40,8 +40,7 @@ for localSuffix in localSuffixes:
         else:
             lastCurated = 0
 
-        i=i+1
-
+       
         # number of deaths
         aktDeaths=total.iloc[i]['Deaths']
         
@@ -66,6 +65,8 @@ for localSuffix in localSuffixes:
         lastDiff = diff
 
         AktDiff = AktDiff.append({'StillInfected' : stillInfected, 'Diff' : diff, 'Percent': percent, 'DiffDiff' : DiffDiff}, ignore_index=True)
+
+        i=i+1
 
     # add the calculated kpis to the values matrix
     outValue = pd.concat([total , AktDiff], axis=1)
