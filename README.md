@@ -9,11 +9,19 @@ jochen.linkohr@gmx.de
 
 ## Here the results:
 
+### update 5 April 2020: added Chart "last Week"
+As I wanted to know if the shutdown has any impact on the infection rate and how much it is progressing, 
+I added a new KPI "Relative LastWeek" which is the relation of new infected compared to the amount of 5 days before. I am assuming that someone who already has a documented infection will be separated and not infect new people (I know, this is a small error, but without knowing, I tried to simplyfy the model. )
+
 ### Germany total: 
 
 [Absolute Values Germany](https://jlinkohr.github.io/CoronaCurve/Absolute_Values_GER.png)
 
 [Relative Values Germany](https://jlinkohr.github.io/CoronaCurve/Relative_Values_GER.png)
+
+look at the values on 21st of March: there you can see an immense decrease in the rate (which means the shutdown of schools and most companies 5 days ago has an effect. The shape of the curve repats 5 days later...). So it is proved that the shutdown had an effect ! If we restart, we should have a look on this value as well as the absolute values...
+
+[Relative Infection rate to 5 day ago Germany](https://jlinkohr.github.io/CoronaCurve/Relative_Values_LastWeekGER.png)
 
 ### Baden-Württemberg:
 
@@ -21,25 +29,32 @@ jochen.linkohr@gmx.de
 
 [Relative Values Baden-Württemberg](https://jlinkohr.github.io/CoronaCurve/Relative_Values_BW.png)
 
+[Relative Infection rate to 5 day ago Baden-Württemberg](https://jlinkohr.github.io/CoronaCurve/Relative_Values_LastWeekBW.png)
+
 ### Bayern:
 
 [Absolute Values Bayern](https://jlinkohr.github.io/CoronaCurve/Absolute_Values_BY.png)
 
 [Relative Values Bayern](https://jlinkohr.github.io/CoronaCurve/Relative_Values_BY.png)
 
+[Relative Infection rate to 5 day ago Bayern](https://jlinkohr.github.io/CoronaCurve/Relative_Values_LastWeekBY.png)
 ### World: 
 
 [Absolute Values world](https://jlinkohr.github.io/CoronaCurve/Absolute_Values_WORLD.png)
 
 [Relative Values world](https://jlinkohr.github.io/CoronaCurve/Relative_Values_WORLD.png)
 
+[Relative Infection rate to 5 day ago World](https://jlinkohr.github.io/CoronaCurve/Relative_Values_LastWeekWORLD.png)
+
 ### USA: 
+
+as we see, the US rate is going down, but they will need one or two cycles before being really down
 
 [Absolute Values USA](https://jlinkohr.github.io/CoronaCurve/Absolute_Values_US.png)
 
 [Relative Values USA](https://jlinkohr.github.io/CoronaCurve/Relative_Values_US.png)
 
-
+[Relative Infection rate to 5 day ago US](https://jlinkohr.github.io/CoronaCurve/Relative_Values_LastWeekUS.png)
 
 ###### Data is taken from : https://interaktiv.morgenpost.de/corona-virus-karte-infektionen-deutschland-weltweit/
 
