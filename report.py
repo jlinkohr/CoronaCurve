@@ -167,8 +167,7 @@ for localSuffix in localSuffixes:
     # subplots with full nd second with only last 30 day due to scaling
     fig, axes = plt.subplots(2,1)
     axes[0].xaxis.set_visible(False) 
-    axes[1].xaxis.set_visible(False)
-  
+    
     lastRelInfectedToLastWeek = f"{outValue.iloc[-1]['relInfectedToLastWeek']:.2f}"
     outValue.plot.bar(x='Date', y='relInfectedToLastWeek', ax = axes[0] ,color='red', title='data taken from Berliner Morgenpost - ' + dataFile +" (" + lastDate + ")" +'\n\nRelativer Wert der Änderung zum Wert vor 5 Tagen (akt. Wert: ' + lastRelInfectedToLastWeek + ")")
     outValue.plot.bar(x='Date', y='relInfectedToLastWeek20', ax = axes[1] ,color='red', title='Relativer Wert der Änderung zum Wert vor 5 Tagen (letzte 20 Tageswerte) (akt. Wert: ' + lastRelInfectedToLastWeek + ")")
