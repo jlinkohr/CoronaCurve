@@ -12,6 +12,8 @@ jochen.linkohr@gmx.de
 ### update 5 April 2020: added Chart "last Week"
 As I wanted to know if the shutdown has any impact on the infection rate and how much it is progressing, 
 I added a new KPI "Relative LastWeek" which is the relation of new infected compared to the amount of 5 days before. I am assuming that someone who already has a documented infection will be separated and not infect new people (I know, this is a small error, but without knowing, I tried to simplyfy the model. )
+### update 11 April 2020: added "last 20 days" to the above chart
+The values are going down. To see how data changes, the scale is smll enough. So I added a chart only with the last 20 days to see how the values progressed in the last 2-4 infection cycles
 
 ### Germany total: 
 
