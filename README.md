@@ -60,3 +60,4 @@ as we see, the US rate is going down, but they will need one or two cycles befor
 
 ###### Data is taken from : https://interaktiv.morgenpost.de/corona-virus-karte-infektionen-deutschland-weltweit/
 
+
