@@ -22,7 +22,6 @@ for localSuffix in localSuffixes:
     # DiffDiff - change of change (difference of changes from last change value to today)
     AktDiff = pd.DataFrame(columns=['StillInfected', 'Diff', 'Percent', 'DiffDiff'])
     lastDiff = 0
-
     # go through all values and calculate the addiional kpis for each day
     for x in range(len(total)):
 
@@ -81,7 +80,32 @@ for localSuffix in localSuffixes:
         else:
             relInfectedToLastWeek20 = 0
 
-        AktDiff = AktDiff.append({'relInfectedToLastWeek' : relInfectedToLastWeek, 'relInfectedToLastWeek20' : relInfectedToLastWeek20, 'StillInfected' : stillInfected, 'Diff' : diff, 'Percent': percent, 'DiffDiff' : DiffDiff}, ignore_index=True)
+        # calculate "reproduction" rate
+        if (i > 7):
+            #sum of new Infections day -8 to -5
+            sum4Infected1 = 0
+            #sum of new Infections day -4 to -1
+            sum4Infected2 = 0
+            # calculate the sum of new infections day -8 to -5 (they might not know that they are infected the day before)
+            # be careful with the index! we are in day -1, because the array is not yet written so index (i) is today, but not present
+            for k in range(4):
+                sum4Infected1 =sum4Infected1 + AktDiff.iloc[i-k-5]['Diff']          
+            # calculate the sum of new infections day -4 to -1 (they might not know that they are infected the day before)
+            for k in range(3):
+                 sum4Infected2 =sum4Infected2 + AktDiff.iloc[i-k-1]['Diff']
+            # add the number for today
+            sum4Infected2 = sum4Infected2 + diff
+            # calculate reproduction rate     
+            reproRate = sum4Infected2 / sum4Infected1
+        else:
+            reproRate = 0
+    
+        # copy last 30 days in container reproRate30
+        if (i > len(total)-20):
+            reproRate20 = reproRate
+        else:
+            reproRate20 = 0
+        AktDiff = AktDiff.append({'reproRate' : reproRate, 'reproRate20' : reproRate20,'relInfectedToLastWeek' : relInfectedToLastWeek, 'relInfectedToLastWeek20' : relInfectedToLastWeek20, 'StillInfected' : stillInfected, 'Diff' : diff, 'Percent': percent, 'DiffDiff' : DiffDiff}, ignore_index=True)
 
         i=i+1
 
@@ -165,12 +189,18 @@ for localSuffix in localSuffixes:
     #plt.savefig("Relative_Values_LastWeek" + localSuffix + ".png", dpi=300)
 
     # subplots with full nd second with only last 30 day due to scaling
-    fig, axes = plt.subplots(2,1)
+    fig, axes = plt.subplots(4,1)
     axes[0].xaxis.set_visible(False) 
+    axes[1].xaxis.set_visible(False) 
+    axes[2].xaxis.set_visible(False) 
     
     lastRelInfectedToLastWeek = f"{outValue.iloc[-1]['relInfectedToLastWeek']:.2f}"
+    reproRate = f"{outValue.iloc[-1]['reproRate']:.2f}"
+    
     outValue.plot.bar(x='Date', y='relInfectedToLastWeek', ax = axes[0] ,color='red', title='data taken from Berliner Morgenpost - ' + dataFile +" (" + lastDate + ")" +'\n\nRelativer Wert der Änderung zum Wert vor 5 Tagen (akt. Wert: ' + lastRelInfectedToLastWeek + ")")
     outValue.plot.bar(x='Date', y='relInfectedToLastWeek20', ax = axes[1] ,color='red', title='Relativer Wert der Änderung zum Wert vor 5 Tagen (letzte 20 Tageswerte) (akt. Wert: ' + lastRelInfectedToLastWeek + ")")
+    outValue.plot.bar(x='Date', y='reproRate', ax = axes[2] ,color='blue', title='Reproduktionsrate Intervall 4 Tage (akt. Wert: ' + reproRate + ")")
+    outValue.plot.bar(x='Date', y='reproRate20', ax = axes[3] ,color='blue', title='Reproduktionsrate Intervall 4 Tage (letzte 20 Tage)(akt. Wert: ' + reproRate + ")")
     plt.tight_layout()
     # save it in a file
     plt.savefig("Relative_Values_LastWeek" + localSuffix + ".png", dpi=300)
