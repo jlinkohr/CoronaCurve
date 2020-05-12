@@ -4,6 +4,9 @@ import matplotlib.pyplot as plt
 # process files with these suffixes
 localSuffixes = ["BW", "BY", "GER", "WORLD", "US"]
 
+# flexinterval
+flexInt = 5
+
 for localSuffix in localSuffixes:
     print (f"------ processing {localSuffix} -----\n")
 
@@ -105,7 +108,35 @@ for localSuffix in localSuffixes:
             reproRate20 = reproRate
         else:
             reproRate20 = 0
-        AktDiff = AktDiff.append({'reproRate' : reproRate, 'reproRate20' : reproRate20,'relInfectedToLastWeek' : relInfectedToLastWeek, 'relInfectedToLastWeek20' : relInfectedToLastWeek20, 'StillInfected' : stillInfected, 'Diff' : diff, 'Percent': percent, 'DiffDiff' : DiffDiff}, ignore_index=True)
+
+        # calculate "reproductionflex" rate
+
+        if (i > (2*flexInt)-1):
+            #sum of new Infections day -2xflexint to -flexint
+            sumFlexInfected1 = 0
+            #sum of new Infections day flexint to -1
+            sumFlexInfected2 = 0
+            # calculate the sum of new infections day -8 to -5 (they might not know that they are infected the day before)
+            # be careful with the index! we are in day -1, because the array is not yet written so index (i) is today, but not present
+            for k in range(flexInt):
+                sumFlexInfected1 =sumFlexInfected1 + AktDiff.iloc[i-k-flexInt-1]['Diff']          
+            # calculate the sum of new infections day -4 to -1 (they might not know that they are infected the day before)
+            for k in range(flexInt-1):
+                 sumFlexInfected2 =sumFlexInfected2 + AktDiff.iloc[i-k-1]['Diff']
+            # add the number for today
+            sumFlexInfected2 = sumFlexInfected2 + diff
+            # calculate reproduction rate     
+            reproFlexRate = sumFlexInfected2 / sumFlexInfected1
+        else:
+            reproFlexRate = 0
+    
+        # copy last 30 days in container reproRate30
+        if (i > len(total)-20):
+            reproFlexRate20 = reproFlexRate
+        else:
+            reproFlexRate20 = 0
+
+        AktDiff = AktDiff.append({'reproRate' : reproRate, 'reproRate20' : reproRate20,'reproFlexRate' : reproFlexRate, 'reproFlexRate20' : reproFlexRate20, 'relInfectedToLastWeek' : relInfectedToLastWeek, 'relInfectedToLastWeek20' : relInfectedToLastWeek20, 'StillInfected' : stillInfected, 'Diff' : diff, 'Percent': percent, 'DiffDiff' : DiffDiff}, ignore_index=True)
 
         i=i+1
 
@@ -204,6 +235,22 @@ for localSuffix in localSuffixes:
     plt.tight_layout()
     # save it in a file
     plt.savefig("Relative_Values_LastWeek" + localSuffix + ".png", dpi=300)
+
+    # reprorates
+    fig, axes = plt.subplots(4,1)
+    axes[0].xaxis.set_visible(False) 
+    axes[1].xaxis.set_visible(False) 
+    axes[2].xaxis.set_visible(False) 
+    
+    reproRate = f"{outValue.iloc[-1]['reproRate']:.2f}"
+    reproFlexRate = f"{outValue.iloc[-1]['reproFlexRate']:.2f}"
+    outValue.plot.bar(x='Date', y='reproFlexRate', ax = axes[0] ,color='red', title='data taken from Berliner Morgenpost - ' + dataFile +" (" + lastDate + ")" +'\n\nReprorate ' + " (Interval: " + f"{flexInt} Tage) :" + reproFlexRate )
+    outValue.plot.bar(x='Date', y='reproFlexRate20', ax = axes[1] ,color='red', title='Reproduktionsrate Intervall ' + f"{flexInt}" + '(letzte 20 Tageswerte)')
+    outValue.plot.bar(x='Date', y='reproRate', ax = axes[2] ,color='blue', title='Reproduktionsrate Intervall 4 Tage (akt. Wert: ' + reproRate + ")")
+    outValue.plot.bar(x='Date', y='reproRate20', ax = axes[3] ,color='blue', title='Reproduktionsrate Intervall 4 Tage (letzte 20 Tage)(akt. Wert: ' + reproRate + ")")
+    plt.tight_layout()
+    # save it in a file
+    plt.savefig("Reprorate" + localSuffix + ".png", dpi=300)
 
 
     # dont show, we are saving only, uncomment to see the chart instant
