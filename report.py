@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 localSuffixes = ["BW", "BY", "GER", "WORLD", "US"]
 
 # flexinterval
-flexInt = 5
+flexInt = 7
 
 for localSuffix in localSuffixes:
     print (f"------ processing {localSuffix} -----\n")
