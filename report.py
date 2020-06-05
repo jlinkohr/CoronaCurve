@@ -245,7 +245,7 @@ for localSuffix in localSuffixes:
     reproRate = f"{outValue.iloc[-1]['reproRate']:.2f}"
     reproFlexRate = f"{outValue.iloc[-1]['reproFlexRate']:.2f}"
     outValue.plot.bar(x='Date', y='reproFlexRate', ax = axes[0] ,color='red', title='data taken from Berliner Morgenpost - ' + dataFile +" (" + lastDate + ")" +'\n\nReprorate ' + " (Interval: " + f"{flexInt} Tage) :" + reproFlexRate )
-    outValue.plot.bar(x='Date', y='reproFlexRate20', ax = axes[1] ,color='red', title='Reproduktionsrate Intervall ' + f"{flexInt}" + '(letzte 20 Tageswerte)')
+    outValue.plot.bar(x='Date', y='reproFlexRate20', ax = axes[1] ,color='red', title='Reproduktionsrate Intervall ' + f"{flexInt}" + ' Tage (letzte 20 Tageswerte)')
     outValue.plot.bar(x='Date', y='reproRate', ax = axes[2] ,color='blue', title='Reproduktionsrate Intervall 4 Tage (akt. Wert: ' + reproRate + ")")
     outValue.plot.bar(x='Date', y='reproRate20', ax = axes[3] ,color='blue', title='Reproduktionsrate Intervall 4 Tage (letzte 20 Tage)(akt. Wert: ' + reproRate + ")")
     plt.tight_layout()
