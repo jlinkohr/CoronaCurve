@@ -1,5 +1,10 @@
+# some calculations about corona values
+# start date somewhen in 3/2020
+# added multiprocessing in 6/2020
+
 import pandas as pd 
 import matplotlib.pyplot as plt 
+from multiprocessing import Process 
 
 # process files with these suffixes
 localSuffixes = ["BW", "BY", "GER", "WORLD", "US"]
@@ -7,7 +12,7 @@ localSuffixes = ["BW", "BY", "GER", "WORLD", "US"]
 # flexinterval
 flexInt = 7
 
-for localSuffix in localSuffixes:
+def processWorker(localSuffix):
     print (f"------ processing {localSuffix} -----\n")
 
     #set the filename to process
@@ -213,11 +218,6 @@ for localSuffix in localSuffixes:
     ##
     #fig, axes = plt.subplots(2,1)
      
-#    lastRelInfectedToLastWeek = f"{outValue.iloc[-1]['relInfectedToLastWeek']:.2f}"
- #   outValue.plot.bar(x='Date', y='relInfectedToLastWeek', color='red', title='data taken from Berliner Morgenpost - ' + dataFile +" (" + lastDate + ")" +'\n\nRelativer Wert der Änderung zum Wert vor 5 Tagen (akt. Wert: ' + lastRelInfectedToLastWeek + ")")
-  #  plt.tight_layout()
-   # # save it in a file
-    #plt.savefig("Relative_Values_LastWeek" + localSuffix + ".png", dpi=300)
 
     # subplots with full nd second with only last 30 day due to scaling
     fig, axes = plt.subplots(4,1)
@@ -251,8 +251,21 @@ for localSuffix in localSuffixes:
     plt.tight_layout()
     # save it in a file
     plt.savefig("Reprorate" + localSuffix + ".png", dpi=300)
+    print(f"Suffix {localSuffix} done.")
+    return
 
 
-    # dont show, we are saving only, uncomment to see the chart instant
-    # plt.show()
-    # p = input()
+
+if __name__ == '__main__':
+    jobs = []
+    for localSuffix in localSuffixes:
+        print(f"starting process for suffix {localSuffix}")
+        # spawn the worker
+        x = Process(target=processWorker, args=(localSuffix,))
+        x.start()
+        jobs.append(x)
+    # all processes started
+    for x in jobs:
+        # wait for all jobs to close
+        x.join()
+    
